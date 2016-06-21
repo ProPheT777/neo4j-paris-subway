@@ -6,7 +6,7 @@ Start a neo4j server
 docker run \
     --publish=7474:7474 --publish=7687:7687 \
     --volume=$HOME/neo4j/data:/data \
-    --env=NEO4J_AUTH=neo4j/azerty
+    --env=NEO4J_AUTH=neo4j/azerty \
     neo4j:3.0
 ```
 

@@ -40,7 +40,7 @@ with open('structure.csv', 'rb') as file, open('geocode.csv', 'a+') as geofile:
     for row in csv.reader(geofile):
         locations[row[0]] = {"longitude": row[1], "latitude": row[2]}
 
-driver = GraphDatabase.driver('bolt://127.0.0.1', auth=basic_auth('neo4j', 'neo4j'))
+driver = GraphDatabase.driver('bolt://127.0.0.1', auth=basic_auth('neo4j', 'azerty'))
 session = driver.session()
 
 for line, stations in metros.items():
@@ -48,10 +48,17 @@ for line, stations in metros.items():
     session.run("CREATE CONSTRAINT on (s:Station) ASSERT s.name IS UNIQUE")
 
     for index, station in enumerate(stations):
-        session.run(
-            "MERGE (s:Station {name: {name}}) ON CREATE SET s.latitude = {latitude}, s.longitude = {longitude}",
-            {"name": station, "latitude": locations[station]['latitude'], "longitude": locations[station]['longitude']}
-        )
+
+        if(locations.has_key(station)):
+            session.run(
+                "MERGE (s:Station {name: {name}}) ON CREATE SET s.latitude = {latitude}, s.longitude = {longitude}",
+                {"name": station, "latitude": locations[station]['latitude'], "longitude": locations[station]['longitude']}
+            )
+        else:
+            session.run(
+                "MERGE (s:Station {name: {name}}) ON CREATE SET s.latitude = {latitude}, s.longitude = {longitude}",
+                {"name": station, "latitude": 0.0, "longitude": 0.0}
+            )
 
         session.run(
             "MATCH (l:Line), (s:Station) WHERE l.name = {line} AND s.name = {station} MERGE (l)-[:HAVE_STATION]->(s)",

@@ -14,7 +14,7 @@ docker run -d \
 Seed neo4j
 
 ```
-pip install -r requirements.txt
+(sudo) pip install -r requirements.txt
 ./loader.py
 ```
 

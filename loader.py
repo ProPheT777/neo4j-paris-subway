@@ -40,7 +40,7 @@ with open('structure.csv', 'rb') as file, open('geocode.csv', 'a+') as geofile:
     for row in csv.reader(geofile):
         locations[row[0]] = {"longitude": row[1], "latitude": row[2]}
 
-driver = GraphDatabase.driver('bolt://127.0.0.1', auth=basic_auth('neo4j', 'azerty'))
+driver = GraphDatabase.driver('bolt://0.0.0.0')
 session = driver.session()
 
 for line, stations in metros.items():
